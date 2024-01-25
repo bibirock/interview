@@ -24,7 +24,7 @@
 3. 製作 API
 
 -  GET /get-config 返回當前的 app.config.json 文件內容。
-- PATCH /update-config
+- PUT /update-config
   - 允許部分更新配置文件中的項目，必須滿足以下驗證條件
   - maxConnections 必須是數字，限制 0 ~ 10000。
   - maintenanceMode 必須是boolean。
