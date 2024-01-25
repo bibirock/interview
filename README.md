@@ -1,73 +1,53 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 開發兩支 Nest.js API，用於管理應用程式的配置設定。
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 一支 API 用於取得當前設定，另一支 API 用於更新設定。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+步驟說明：
 
-## Description
+1. 建立一份 app.config.json 文件如下，放置於專案根目錄
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```json
+{
+  "maxConnections": 10000,
+  "maintenanceMode": false,
+  "supportedLocales": [
+    "en-US",
+    "fr-FR",
+    "es-ES"
+  ],
+  "loggingLevel": "info"
+}
 ```
 
-## Running the app
+2. 為資料創建 interface
 
-```bash
-# development
-$ npm run start
+3. 製作 API
 
-# watch mode
-$ npm run start:dev
+-  GET /get-config 返回當前的 app.config.json 文件內容。
+- PATCH /update-config
+  - 允許部分更新配置文件中的項目，必須滿足以下驗證條件
+  - maxConnections 必須是數字，限制 0 ~ 10000。
+  - maintenanceMode 必須是boolean。
+  - supportedLocales 可以接收任意字串傳入。
+  - loggingLevel 只能為 "debug" 、"warn"、"error"、"info" 這四種。
+  - 如不符合以上條件，需回傳錯誤訊息 400 Bad Request ，及error-message，格式不限
+  - 成功也必須回傳狀態碼 200 及成功訊息
 
-# production mode
-$ npm run start:prod
+
+### 參考資料
+
+讀取本機檔案的方法：
+
+```typeScript
+
+import * as fs from 'fs';
+
+import * as path from 'path';
+
+// 讀取檔案位址方法
+const configPath = path.resolve('app.config.json')
+
+// 寫入檔案方法，參數檢查完後進行寫檔 JSON.stringify
+fs.writeFileSync(path, JSON.stringify(data, null, 2))
+
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
