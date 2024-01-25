@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  interview:
+    image: node:20
+    container_name: interview
+    restart: "no"
+    working_dir: /root/interview
+    volumes:
+      - ../:/root/interview
+    command: sh -c "tail -f /dev/null"
