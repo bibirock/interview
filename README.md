@@ -47,6 +47,9 @@ import * as path from 'path';
 // 讀取檔案位址方法
 const configPath = path.resolve('app.config.json')
 
+// 讀取檔案的方法，解析為 utf-8 'string'
+const configData = fs.readFileSync(configPath, 'utf-8');
+
 // 寫入檔案方法，參數檢查完後進行寫檔 JSON.stringify
 fs.writeFileSync(path, JSON.stringify(data, null, 2))
 
